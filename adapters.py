@@ -10,20 +10,30 @@ Compatible databases:
 import psycopg2
 
 
+def raise_not_implemented(f):
+    """Raises not implemented error."""
+    def wrapper(*args, **kwargs):
+        raise NotImplementedError, 'Database adapter must implement "%s"' % f.__name__
+    return wrapper
+
+
 class DBAdapter(object):
     """Virtual class for database adapters."""
+    @raise_not_implemented
     def connect(self, database):
         """Connects to existing database.
 
         Parameters:
         database -- Database name to connect with.
         """
-        raise NotImplemented, 'Database adapter must implement connect'
+        pass
 
+    @raise_not_implemented
     def disconnect(self):
         """Disconnects from currently connected database."""
-        raise NotImplemented, 'Database adapter must implement disconnect'
+        pass
 
+    @raise_not_implemented
     def create_table(self, name, attributes):
         """Creates new table in database.
 
@@ -31,19 +41,40 @@ class DBAdapter(object):
         name -- Table name.
         attributes -- Dictionary with attributes and repective types.
         """
-        raise NotImplemented, 'Database adapter must implement create_table'
+        pass
 
+    @raise_not_implemented
     def drop_table(self, name):
         """Deletes existing table from database.
 
         Parameters:
         name -- Table name.
         """
-        raise NotImplemented, 'Database adapter must implement drop_table'
+        pass
+
+    @raise_not_implemented
+    def list_columns(self, table):
+        """Lists the name of all columns in the given table.
+
+        Parameters:
+        table -- Table name.
+
+        Return:
+        List with columns names.
+        """
+        pass
 
 
 class PostgreSQLAdapter(DBAdapter):
     """PostgreSQL database adapter."""
+
+    # PostgreSQL Datatypes
+    # http://www.postgresql.org/docs/current/static/datatype.html
+    BOOLEAN = 'boolean'
+    INTEGER = 'integer'
+    FLOAT = 'real'
+    STRING = 'text'
+
     def __init__(self):
         super(PostgreSQLAdapter, self).__init__()
         self.connection = None
@@ -58,7 +89,10 @@ class PostgreSQLAdapter(DBAdapter):
         self.connection.close()
 
     def create_table(self, name, attributes):
-        cmd = 'CREATE TABLE %s ();' % name
+        cmd = 'CREATE TABLE %s (' % name
+        cmd += ','.join('%s %s' % (name, type) for name, type in attributes.items())
+        cmd += ');'
+
         self.cursor.execute(cmd)
         self.connection.commit()
 
@@ -66,3 +100,7 @@ class PostgreSQLAdapter(DBAdapter):
         cmd = 'DROP TABLE %s;' % name
         self.cursor.execute(cmd)
         self.connection.commit()
+
+    def list_columns(self, table):
+        self.cursor.execute('SELECT * FROM %s;' % table)
+        return [desc[0] for desc in self.cursor.description]

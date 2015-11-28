@@ -52,6 +52,12 @@ Should you need to delete the created database, just drop it with the following 
 $ dropdb healthdb
 ```
 
+Automated tests require the creation of the `testdb` database for testing purposes.
+
+```sh
+$ createdb testdb
+```
+
 # Specification
 In this project, we develop a system able to store and query data for public health management.
 
