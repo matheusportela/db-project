@@ -81,6 +81,15 @@ class DBAdapter(object):
         """
         pass
 
+    @raise_not_implemented
+    def select_all(self, table):
+        """Select data from the given table.
+
+        Parameters:
+        table -- Table name.
+        """
+        pass
+
 
 class PostgreSQLAdapter(DBAdapter):
     """PostgreSQL database adapter."""
@@ -169,3 +178,8 @@ class PostgreSQLAdapter(DBAdapter):
         if type(value) == str:
             return "'%s'" % value
         return value
+
+    def select_all(self, table):
+        cmd = 'SELECT * FROM %s;' % table
+        self.cursor.execute(cmd)
+        return self.cursor.fetchall()

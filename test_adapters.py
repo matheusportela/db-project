@@ -128,12 +128,12 @@ class TableManipulationTestCase(unittest.TestCase):
             ('test_float', self.db.FLOAT),
             ('test_bool', self.db.BOOLEAN),
         ]
-        self.data_tuple = (123, 'Test name', 42, 3.141592653589, True)
+        self.data_tuple = (123, 'Test name', 42, 3.14159, True)
         self.data_dict = {
             'test_pk': 123,
             'test_str': 'Test name',
             'test_int': 42,
-            'test_float': 3.141592653589,
+            'test_float': 3.14159,
             'test_bool': True,
         }
 
@@ -157,6 +157,16 @@ class TableManipulationTestCase(unittest.TestCase):
         self.db.insert(self.table, self.data_tuple)
         self.db.drop_table(self.table)
         self.db.disconnect()
+
+    def testSelectAll(self):
+        self.db.connect('testdb')
+        self.db.create_table(self.table, self.columns)
+        self.db.insert(self.table, self.data_tuple)
+        rows = self.db.select_all(self.table)
+        self.db.drop_table(self.table)
+        self.db.disconnect()
+
+        self.assertTrue(self.data_tuple in rows)
 
 
 if __name__ == '__main__':
