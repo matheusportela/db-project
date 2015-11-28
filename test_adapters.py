@@ -175,6 +175,42 @@ class TableManipulationTestCase(unittest.TestCase):
         self.assertTrue(self.data_tuple in all_rows)
         self.assertTrue(expected_rows in projected_rows)
 
+    def testSelectWhere(self):
+        data = [
+            (1, 'Test1', 0, 0.0, True),
+            (2, 'Test2', 0, 0.1, True),
+            (3, 'Test3', 0, 0.1, True),
+        ]
+
+        self.db.connect('testdb')
+        self.db.create_table(self.table, self.columns)
+
+        for d in data:
+            self.db.insert(self.table, d)
+
+        rows1 = self.db.select(self.table, columns=['test_pk', 'test_str'], where=('=', 'test_pk', 2))
+        rows2 = self.db.select(self.table, columns=['test_pk', 'test_str'], where=('=', 'test_str', "'Test3'"))
+        rows3 = self.db.select(self.table, where=('=', 'test_int', 0))
+        rows4 = self.db.select(self.table, where=('>', 'test_float', 0))
+
+        self.db.drop_table(self.table)
+        self.db.disconnect()
+
+        self.assertTrue((2, 'Test2') in rows1)
+        self.assertTrue((3, 'Test3') in rows2)
+        self.assertEqual(data, rows3)
+        self.assertEqual(data[1:], rows4)
+
+    def testEq(self):
+        where = self.db._convert_where(('=', 'x', 'y'))
+        self.assertEqual(where, 'WHERE x = y')
+
+        where = self.db._convert_where(('and', 'x', 'y'))
+        self.assertEqual(where, 'WHERE x AND y')
+
+        where = self.db._convert_where(('or', 'x', 'y'))
+        self.assertEqual(where, 'WHERE x OR y')
+
 
 if __name__ == '__main__':
     unittest.main()

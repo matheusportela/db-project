@@ -82,12 +82,13 @@ class DBAdapter(object):
         pass
 
     @raise_not_implemented
-    def select(self, table, columns=None):
+    def select(self, table, columns=None, where=None):
         """Select data from the given table.
 
         Parameters:
         table -- Table name.
         columns -- List of columns to project onto the table.
+        where -- List of filtering conditions in the form [(op, value1, value2)].
         """
         pass
 
@@ -180,10 +181,12 @@ class PostgreSQLAdapter(DBAdapter):
             return "'%s'" % value
         return value
 
-    def select(self, table, columns=None):
+    def select(self, table, columns=None, where=None):
         cmd = 'SELECT '
         cmd += self._convert_columns(columns)
-        cmd += ' FROM %s;' % table
+        cmd += ' FROM %s ' % table
+        cmd += self._convert_where(where)
+        cmd += ';'
         self.cursor.execute(cmd)
         return self.cursor.fetchall()
 
@@ -191,3 +194,34 @@ class PostgreSQLAdapter(DBAdapter):
         if columns:
             return ', '.join(columns)
         return '*'
+
+    def _convert_where(self, where):
+        if where == None:
+            return ''
+
+        return 'WHERE ' + self._convert_condition_to_str(where)
+
+    def _convert_condition_to_str(self, condition):
+        if type(condition) == tuple:
+            op, value1, value2 = condition
+            converted_value1 = self._convert_condition_to_str(value1)
+            converted_value2 = self._convert_condition_to_str(value2)
+
+            if op == '=':
+                return '{} = {}'.format(converted_value1, converted_value2)
+            elif op == 'and':
+                return '{} AND {}'.format(converted_value1, converted_value2)
+            elif op == 'or':
+                return '{} OR {}'.format(converted_value1, converted_value2)
+            elif op == '>':
+                return '{} > {}'.format(converted_value1, converted_value2)
+            elif op == '<':
+                return '{} < {}'.format(converted_value1, converted_value2)
+            elif op == '>=':
+                return '{} >= {}'.format(converted_value1, converted_value2)
+            elif op == '<=':
+                return '{} <= {}'.format(converted_value1, converted_value2)
+            else:
+                raise ValueError, 'Invalid operation "%s"' % op
+        else:
+            return condition
