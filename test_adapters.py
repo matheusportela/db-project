@@ -162,11 +162,18 @@ class TableManipulationTestCase(unittest.TestCase):
         self.db.connect('testdb')
         self.db.create_table(self.table, self.columns)
         self.db.insert(self.table, self.data_tuple)
-        rows = self.db.select_all(self.table)
+
+        all_rows = self.db.select(self.table)
+
+        columns = ['test_pk', 'test_float']
+        projected_rows = self.db.select(self.table, columns=columns)
+        expected_rows = tuple(self.data_dict[c] for c in columns)
+
         self.db.drop_table(self.table)
         self.db.disconnect()
 
-        self.assertTrue(self.data_tuple in rows)
+        self.assertTrue(self.data_tuple in all_rows)
+        self.assertTrue(expected_rows in projected_rows)
 
 
 if __name__ == '__main__':

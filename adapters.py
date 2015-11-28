@@ -82,11 +82,12 @@ class DBAdapter(object):
         pass
 
     @raise_not_implemented
-    def select_all(self, table):
+    def select(self, table, columns=None):
         """Select data from the given table.
 
         Parameters:
         table -- Table name.
+        columns -- List of columns to project onto the table.
         """
         pass
 
@@ -179,7 +180,14 @@ class PostgreSQLAdapter(DBAdapter):
             return "'%s'" % value
         return value
 
-    def select_all(self, table):
-        cmd = 'SELECT * FROM %s;' % table
+    def select(self, table, columns=None):
+        cmd = 'SELECT '
+        cmd += self._convert_columns(columns)
+        cmd += ' FROM %s;' % table
         self.cursor.execute(cmd)
         return self.cursor.fetchall()
+
+    def _convert_columns(self, columns):
+        if columns:
+            return ', '.join(columns)
+        return '*'
