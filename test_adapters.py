@@ -67,13 +67,13 @@ class TableCreationTestCase(unittest.TestCase):
 
     @check_success_exception
     def testTableWithTextAttributeCreation(self):
-        attributes = {
-            'attr_boolean': self.db.BOOLEAN,
-            'attr_integer': self.db.INTEGER,
-            'attr_float': self.db.FLOAT,
-            'attr_text': self.db.STRING,
-            'attr_pk': self.db.PK,
-        }
+        attributes = [
+            ('attr_boolean', self.db.BOOLEAN),
+            ('attr_integer', self.db.INTEGER),
+            ('attr_float', self.db.FLOAT),
+            ('attr_text', self.db.STRING),
+            ('attr_pk', self.db.PK),
+        ]
 
         self.db.connect('testdb')
         self.db.create_table(self.table, attributes)
@@ -86,8 +86,8 @@ class TableCreationTestCase(unittest.TestCase):
         self.db.drop_table(self.table)
         self.db.disconnect()
 
-        for attribute in attributes:
-            self.assertTrue(attribute in columns)
+        for name, type in attributes:
+            self.assertTrue(name in columns)
         self.assertFalse('not_attr' in columns)
 
 
@@ -121,14 +121,15 @@ class TableManipulationTestCase(unittest.TestCase):
     def setUp(self):
         self.db = adapters.PostgreSQLAdapter()
         self.table = 'test_manipulation_table'
-        self.columns = {
-            'test_pk': self.db.PK,
-            'test_str': self.db.STRING,
-            'test_int': self.db.INTEGER,
-            'test_float': self.db.FLOAT,
-            'test_bool': self.db.BOOLEAN,
-        }
-        self.data = {
+        self.columns = [
+            ('test_pk', self.db.PK),
+            ('test_str', self.db.STRING),
+            ('test_int', self.db.INTEGER),
+            ('test_float', self.db.FLOAT),
+            ('test_bool', self.db.BOOLEAN),
+        ]
+        self.data_tuple = (123, 'Test name', 42, 3.141592653589, True)
+        self.data_dict = {
             'test_pk': 123,
             'test_str': 'Test name',
             'test_int': 42,
@@ -137,13 +138,23 @@ class TableManipulationTestCase(unittest.TestCase):
         }
 
     @check_success_exception
-    def testInsert(self):
+    def testInsertDict(self):
         self.db.connect('testdb')
 
         if self.table not in self.db.list_tables():
             self.db.create_table(self.table, self.columns)
 
-        self.db.insert(self.table, self.data)
+        self.db.insert(self.table, self.data_dict)
+        self.db.drop_table(self.table)
+        self.db.disconnect()
+
+    def testInsertTuple(self):
+        self.db.connect('testdb')
+
+        if self.table not in self.db.list_tables():
+            self.db.create_table(self.table, self.columns)
+
+        self.db.insert(self.table, self.data_tuple)
         self.db.drop_table(self.table)
         self.db.disconnect()
 

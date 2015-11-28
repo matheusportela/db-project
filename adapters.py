@@ -45,7 +45,7 @@ class DBAdapter(object):
 
         Parameters:
         table -- Table name.
-        attributes -- Dictionary with attributes and repective types.
+        attributes -- List of tuples containing the attribute name and its type.
         """
         pass
 
@@ -76,7 +76,7 @@ class DBAdapter(object):
 
         Parameters:
         table -- Table name.
-        data -- Dictionary with column name and value to be
+        data -- Tuple with values or dictionary with column name and value to be
             inserted.
         """
         pass
@@ -115,7 +115,7 @@ class PostgreSQLAdapter(DBAdapter):
     def create_table(self, name, attributes):
         cmd = 'CREATE TABLE %s (' % name
         cmd += ', '.join('%s %s' % (name, type)
-            for name, type in attributes.items())
+            for name, type in attributes)
         cmd += ');'
 
         self.cursor.execute(cmd)
@@ -132,7 +132,13 @@ class PostgreSQLAdapter(DBAdapter):
         return [desc[0] for desc in self.cursor.description]
 
     def insert(self, table, data):
-        cmd = self._generate_insert_query_dict(table, data)
+        if type(data) == dict:
+            cmd = self._generate_insert_query_dict(table, data)
+        elif type(data) == tuple:
+            cmd = self._generate_insert_query_tuple(table, data)
+        else:
+            raise ValueError, 'Insert accepts only dict and tuple types'
+
         self.cursor.execute(cmd)
         self.connection.commit()
 
@@ -142,6 +148,14 @@ class PostgreSQLAdapter(DBAdapter):
         cmd += ') VALUES ('
         cmd += ', '.join('%s' % self._convert_format(value)
             for value in data.values())
+        cmd += ');'
+        return cmd
+
+    def _generate_insert_query_tuple(self, table, data):
+        cmd = 'INSERT INTO %s (' % table
+        cmd += ', '.join('%s' % column for column in self.list_columns(table))
+        cmd += ') VALUES ('
+        cmd += ', '.join('%s' % self._convert_format(value) for value in data)
         cmd += ');'
         return cmd
 
