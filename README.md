@@ -52,10 +52,24 @@ Should you need to delete the created database, just drop it with the following 
 $ dropdb healthdb
 ```
 
+# Testing
+
 Automated tests require the creation of the `testdb` database for testing purposes.
 
 ```sh
 $ createdb testdb
+```
+
+In order to run tests, simply run the following command.
+
+```sh
+$ ./run_tests.sh
+```
+
+The `run_tests.sh` file must have execution privileges. If this is not the case, alter it with the command bellow.
+
+```sh
+$ chmod +x run_tests.sh
 ```
 
 # Specification
