@@ -102,7 +102,10 @@ class DatabaseManipulationTestCase(unittest.TestCase):
         for table in self.tables:
             self.db.create_table(table, {})
 
-        tables = self.db.list_tables()
+        try:
+            tables = self.db.list_tables()
+        except:
+            tables = []
 
         for table in self.tables:
             self.db.drop_table(table)
@@ -112,6 +115,38 @@ class DatabaseManipulationTestCase(unittest.TestCase):
         self.assertFalse('not_table' in tables)
 
         self.db.disconnect()
+
+
+class TableManipulationTestCase(unittest.TestCase):
+    def setUp(self):
+        self.db = adapters.PostgreSQLAdapter()
+        self.table = 'test_manipulation_table'
+        self.columns = {
+            'test_pk': self.db.PK,
+            'test_str': self.db.STRING,
+            'test_int': self.db.INTEGER,
+            'test_float': self.db.FLOAT,
+            'test_bool': self.db.BOOLEAN,
+        }
+        self.data = {
+            'test_pk': 123,
+            'test_str': 'Test name',
+            'test_int': 42,
+            'test_float': 3.141592653589,
+            'test_bool': True,
+        }
+
+    @check_success_exception
+    def testInsert(self):
+        self.db.connect('testdb')
+
+        if self.table not in self.db.list_tables():
+            self.db.create_table(self.table, self.columns)
+
+        self.db.insert(self.table, self.data)
+        self.db.drop_table(self.table)
+        self.db.disconnect()
+
 
 if __name__ == '__main__':
     unittest.main()

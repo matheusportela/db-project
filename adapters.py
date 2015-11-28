@@ -13,7 +13,8 @@ import psycopg2
 def raise_not_implemented(f):
     """Raises not implemented error."""
     def wrapper(*args, **kwargs):
-        raise NotImplementedError, 'Database adapter must implement "%s"' % f.__name__
+        raise NotImplementedError, ('Database adapter must implement "%s"'
+                                    % f.__name__)
     return wrapper
 
 
@@ -69,6 +70,16 @@ class DBAdapter(object):
         """
         pass
 
+    @raise_not_implemented
+    def insert(self, table, data):
+        """Inserts new data to the given table.
+
+        Parameters:
+        table -- Table name.
+        data -- Dictionary with column name and value to be inserted.
+        """
+        pass
+
 
 class PostgreSQLAdapter(DBAdapter):
     """PostgreSQL database adapter."""
@@ -102,7 +113,8 @@ class PostgreSQLAdapter(DBAdapter):
 
     def create_table(self, name, attributes):
         cmd = 'CREATE TABLE %s (' % name
-        cmd += ', '.join('%s %s' % (name, type) for name, type in attributes.items())
+        cmd += ', '.join('%s %s' % (name, type)
+            for name, type in attributes.items())
         cmd += ');'
 
         self.cursor.execute(cmd)
@@ -117,3 +129,24 @@ class PostgreSQLAdapter(DBAdapter):
         cmd = 'SELECT * FROM %s;' % table
         self.cursor.execute(cmd)
         return [desc[0] for desc in self.cursor.description]
+
+    def insert(self, table, data):
+        cmd = 'INSERT INTO %s (' % table
+        cmd += ', '.join('%s' % column for column in data)
+        cmd += ') VALUES ('
+        cmd += ', '.join('%s' % self._convert_format(value)
+            for value in data.values())
+        cmd += ');'
+        self.cursor.execute(cmd)
+        self.connection.commit()
+
+    def _convert_format(self, value):
+        """Convert value to PostgreSQL required format. For instance, strings
+        must be surrounded by single quotes.
+
+        Parameters:
+        value -- Value to be converted.
+        """
+        if type(value) == str:
+            return "'%s'" % value
+        return value
