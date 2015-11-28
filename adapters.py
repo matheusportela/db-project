@@ -34,21 +34,21 @@ class DBAdapter(object):
         pass
 
     @raise_not_implemented
-    def create_table(self, name, attributes):
+    def create_table(self, table, attributes):
         """Creates new table in database.
 
         Parameters:
-        name -- Table name.
+        table -- Table name.
         attributes -- Dictionary with attributes and repective types.
         """
         pass
 
     @raise_not_implemented
-    def drop_table(self, name):
+    def drop_table(self, table):
         """Deletes existing table from database.
 
         Parameters:
-        name -- Table name.
+        table -- Table name.
         """
         pass
 
@@ -102,5 +102,6 @@ class PostgreSQLAdapter(DBAdapter):
         self.connection.commit()
 
     def list_columns(self, table):
-        self.cursor.execute('SELECT * FROM %s;' % table)
+        cmd = 'SELECT * FROM %s;' % table
+        self.cursor.execute(cmd)
         return [desc[0] for desc in self.cursor.description]
