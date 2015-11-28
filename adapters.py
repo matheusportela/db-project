@@ -76,7 +76,8 @@ class DBAdapter(object):
 
         Parameters:
         table -- Table name.
-        data -- Dictionary with column name and value to be inserted.
+        data -- Dictionary with column name and value to be
+            inserted.
         """
         pass
 
@@ -131,14 +132,18 @@ class PostgreSQLAdapter(DBAdapter):
         return [desc[0] for desc in self.cursor.description]
 
     def insert(self, table, data):
+        cmd = self._generate_insert_query_dict(table, data)
+        self.cursor.execute(cmd)
+        self.connection.commit()
+
+    def _generate_insert_query_dict(self, table, data):
         cmd = 'INSERT INTO %s (' % table
         cmd += ', '.join('%s' % column for column in data)
         cmd += ') VALUES ('
         cmd += ', '.join('%s' % self._convert_format(value)
             for value in data.values())
         cmd += ');'
-        self.cursor.execute(cmd)
-        self.connection.commit()
+        return cmd
 
     def _convert_format(self, value):
         """Convert value to PostgreSQL required format. For instance, strings
