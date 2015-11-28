@@ -208,19 +208,19 @@ class PostgreSQLAdapter(DBAdapter):
             converted_value2 = self._convert_condition_to_str(value2)
 
             if op == '=':
-                return '{} = {}'.format(converted_value1, converted_value2)
+                return '({} = {})'.format(converted_value1, converted_value2)
             elif op == 'and':
-                return '{} AND {}'.format(converted_value1, converted_value2)
+                return '({} AND {})'.format(converted_value1, converted_value2)
             elif op == 'or':
-                return '{} OR {}'.format(converted_value1, converted_value2)
+                return '({} OR {})'.format(converted_value1, converted_value2)
             elif op == '>':
-                return '{} > {}'.format(converted_value1, converted_value2)
+                return '({} > {})'.format(converted_value1, converted_value2)
             elif op == '<':
-                return '{} < {}'.format(converted_value1, converted_value2)
+                return '({} < {})'.format(converted_value1, converted_value2)
             elif op == '>=':
-                return '{} >= {}'.format(converted_value1, converted_value2)
+                return '({} >= {})'.format(converted_value1, converted_value2)
             elif op == '<=':
-                return '{} <= {}'.format(converted_value1, converted_value2)
+                return '({} <= {})'.format(converted_value1, converted_value2)
             else:
                 raise ValueError, 'Invalid operation "%s"' % op
         else:

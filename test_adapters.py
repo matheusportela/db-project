@@ -177,8 +177,8 @@ class TableManipulationTestCase(unittest.TestCase):
 
     def testSelectWhere(self):
         data = [
-            (1, 'Test1', 0, 0.0, True),
-            (2, 'Test2', 0, 0.1, True),
+            (1, 'Test1', 0, 0.0, False),
+            (2, 'Test2', 0, 0.1, False),
             (3, 'Test3', 0, 0.1, True),
         ]
 
@@ -192,6 +192,8 @@ class TableManipulationTestCase(unittest.TestCase):
         rows2 = self.db.select(self.table, columns=['test_pk', 'test_str'], where=('=', 'test_str', "'Test3'"))
         rows3 = self.db.select(self.table, where=('=', 'test_int', 0))
         rows4 = self.db.select(self.table, where=('>', 'test_float', 0))
+        rows5 = self.db.select(self.table, where=('and', ('>', 'test_float', 0), ('=', 'test_pk', 2)))
+        rows6 = self.db.select(self.table, where=('or', ('>', 'test_float', 0), ('=', 'test_bool', False)))
 
         self.db.drop_table(self.table)
         self.db.disconnect()
@@ -200,16 +202,18 @@ class TableManipulationTestCase(unittest.TestCase):
         self.assertTrue((3, 'Test3') in rows2)
         self.assertEqual(data, rows3)
         self.assertEqual(data[1:], rows4)
+        self.assertEqual([data[1]], rows5)
+        self.assertEqual(data, rows6)
 
     def testEq(self):
         where = self.db._convert_where(('=', 'x', 'y'))
-        self.assertEqual(where, 'WHERE x = y')
+        self.assertEqual(where, 'WHERE (x = y)')
 
         where = self.db._convert_where(('and', 'x', 'y'))
-        self.assertEqual(where, 'WHERE x AND y')
+        self.assertEqual(where, 'WHERE (x AND y)')
 
         where = self.db._convert_where(('or', 'x', 'y'))
-        self.assertEqual(where, 'WHERE x OR y')
+        self.assertEqual(where, 'WHERE (x OR y)')
 
 
 if __name__ == '__main__':
