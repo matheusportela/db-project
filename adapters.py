@@ -79,6 +79,7 @@ class PostgreSQLAdapter(DBAdapter):
     INTEGER = 'integer'
     FLOAT = 'real'
     STRING = 'text'
+    PK = 'serial PRIMARY KEY'
 
     def __init__(self):
         super(PostgreSQLAdapter, self).__init__()
@@ -101,7 +102,7 @@ class PostgreSQLAdapter(DBAdapter):
 
     def create_table(self, name, attributes):
         cmd = 'CREATE TABLE %s (' % name
-        cmd += ','.join('%s %s' % (name, type) for name, type in attributes.items())
+        cmd += ', '.join('%s %s' % (name, type) for name, type in attributes.items())
         cmd += ');'
 
         self.cursor.execute(cmd)

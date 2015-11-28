@@ -72,6 +72,7 @@ class TableCreationTestCase(unittest.TestCase):
             'attr_integer': self.db.INTEGER,
             'attr_float': self.db.FLOAT,
             'attr_text': self.db.STRING,
+            'attr_pk': self.db.PK,
         }
 
         self.db.connect('testdb')
