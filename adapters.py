@@ -18,4 +18,12 @@ class DBAdapter(object):
         name -- Table name.
         attributes -- Dictionary with attributes and repective types.
         """
-        pass
+        raise NotImplemented, 'Database adapter must implement create_table'
+
+    def delete_table(name):
+        """Delete existing table from database.
+
+        Parameters:
+        name -- Table name.
+        """
+        raise NotImplemented, 'Database adapter must implement delete_table'
