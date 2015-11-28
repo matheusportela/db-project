@@ -59,8 +59,11 @@ class TableCreationTestCase(unittest.TestCase):
     def testEmptyTableCreation(self):
         self.db.connect('testdb')
         self.db.create_table(self.table, {})
+        tables = self.db.list_tables()
         self.db.drop_table(self.table)
         self.db.disconnect()
+
+        self.assertTrue(self.table in tables)
 
     @check_success_exception
     def testTableWithTextAttributeCreation(self):
@@ -85,6 +88,29 @@ class TableCreationTestCase(unittest.TestCase):
         for attribute in attributes:
             self.assertTrue(attribute in columns)
         self.assertFalse('not_attr' in columns)
+
+
+class DatabaseManipulationTestCase(unittest.TestCase):
+    def setUp(self):
+        self.db = adapters.PostgreSQLAdapter()
+        self.tables = ['test_table_1', 'test_table_2', 'test_table_3']
+
+    def testTableListing(self):
+        self.db.connect('testdb')
+
+        for table in self.tables:
+            self.db.create_table(table, {})
+
+        tables = self.db.list_tables()
+
+        for table in self.tables:
+            self.db.drop_table(table)
+
+        for table in self.tables:
+            self.assertTrue(table in tables)
+        self.assertFalse('not_table' in tables)
+
+        self.db.disconnect()
 
 if __name__ == '__main__':
     unittest.main()

@@ -34,6 +34,11 @@ class DBAdapter(object):
         pass
 
     @raise_not_implemented
+    def list_tables(self):
+        """Lists the name of all tables in the connected database."""
+        pass
+
+    @raise_not_implemented
     def create_table(self, table, attributes):
         """Creates new table in database.
 
@@ -87,6 +92,12 @@ class PostgreSQLAdapter(DBAdapter):
     def disconnect(self):
         self.cursor.close()
         self.connection.close()
+
+    def list_tables(self):
+        cmd = ("SELECT table_name FROM information_schema.tables "
+              "WHERE table_schema = 'public';")
+        self.cursor.execute(cmd)
+        return [table[0] for table in self.cursor.fetchall()]
 
     def create_table(self, name, attributes):
         cmd = 'CREATE TABLE %s (' % name
