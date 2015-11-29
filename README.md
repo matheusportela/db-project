@@ -52,6 +52,12 @@ Should you need to delete the created database, just drop it with the following 
 $ dropdb healthdb
 ```
 
+Build the database.
+
+```sh
+$ psql healthdb < build_db.sql
+```
+
 # Testing
 
 Automated tests require the creation of the `testdb` database for testing purposes.
