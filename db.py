@@ -24,15 +24,15 @@ class PostgreSQLAdapter(object):
 
     def execute_and_commit(self, cmd, *args):
         self.cursor.execute(cmd, *args)
-        print 'Query:', self.cursor.query
         self.connection.commit()
 
-    def execute_and_fetch(self, cmd, *args):
+    def execute_and_fetch_one(self, cmd, *args):
         self.cursor.execute(cmd, *args)
-        print 'Query:', self.cursor.query
-        data = self.cursor.fetchone()
-        print 'Data:', data
-        return data
+        return self.cursor.fetchone()
+
+    def execute_and_fetch_all(self, cmd, *args):
+        self.cursor.execute(cmd, *args)
+        return self.cursor.fetchall()
 
     def _convert_format(self, value):
         if type(value) == str:
@@ -54,7 +54,13 @@ class PostgreSQLAdapter(object):
         cmd = 'SELECT '
         cmd += ', '.join('{}'.format(column) for column in columns)
         cmd += ' FROM {} WHERE pk = {};'.format(table, pk)
-        return self.execute_and_fetch(cmd)
+        return self.execute_and_fetch_one(cmd)
+
+    def read_all(self, table, columns):
+        cmd = 'SELECT '
+        cmd += ', '.join('{}'.format(column) for column in columns)
+        cmd += ' FROM {};'.format(table)
+        return self.execute_and_fetch_all(cmd)
 
     def update(self, table, data):
         cmd = 'UPDATE {} SET '.format(table)

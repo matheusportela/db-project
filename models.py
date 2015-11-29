@@ -51,7 +51,6 @@ class BaseModel(object):
     def load(self):
         self.db.connect(self.database)
         data = self.db.read(self.table, self._columns, self.pk)
-        print 'Loaded data:', type(data[0]), data
         self._set_data(data)
         self.db.disconnect()
 
