@@ -1,3 +1,6 @@
+{% extends "base.html" %}
+{% block title %}DB Project{% endblock %}
+{% block content %}
 <form method="POST" action="/surgeries">
     <th>
         <tr>PK: <input type="text" name="pk"></tr>
@@ -6,3 +9,4 @@
         <tr><input type="submit" value="Submit"></tr>
     </th>
 </form>
+{% endblock %}

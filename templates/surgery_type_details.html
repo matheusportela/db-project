@@ -1,3 +1,6 @@
+{% extends "base.html" %}
+{% block title %}DB Project{% endblock %}
+{% block content %}
 <h1>Surgery type details</h1>
 
 <ul>
@@ -10,3 +13,4 @@
 <a href="/surgery_types">All</a>
 <a href="/surgery_type/{{ surgery_type.pk }}/edit">Edit</a>
 <a href="/surgery_type/{{ surgery_type.pk }}/delete">Delete</a>
+{% endblock %}

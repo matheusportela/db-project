@@ -1,3 +1,6 @@
+{% extends "base.html" %}
+{% block title %}DB Project{% endblock %}
+{% block content %}
 <form method="POST" action="/surgery_type/{{ surgery_type.pk }}/edit">
     <th>
         <tr>PK: {{ surgery_type.pk }}</tr>
@@ -7,3 +10,4 @@
         <tr><input type="submit" value="Submit"></tr>
     </th>
 </form>
+{% endblock %}
