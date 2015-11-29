@@ -1,7 +1,7 @@
 {% extends "base.html" %}
 {% block content %}
 <div class="main">
-    <h1> Surgery type "{{ surgery_type.pk }}" edit</h1>
+    <h1>Surgery type "{{ surgery_type.pk }}" edit</h1>
 </div>
 
 <form class="form-horizontal" method="POST" action="/surgery_type/{{ surgery_type.pk }}/edit">

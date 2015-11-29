@@ -37,24 +37,22 @@
 
 <!-- Modal -->
 <div class="modal fade" id="myModal" role="dialog">
-<div class="modal-dialog">
+    <div class="modal-dialog">
+        <!-- Modal content-->
+        <div class="modal-content">
+            <div class="modal-header">
+                  <button type="button" class="close" data-dismiss="modal">&times;</button>
+                  <h4 class="modal-title">Are you sure you want to delete "{{ surgery_type.name }}"?</h4>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-default" data-dismiss="modal">Cancel</button>
 
-    <!-- Modal content-->
-    <div class="modal-content">
-    <div class="modal-header">
-          <button type="button" class="close" data-dismiss="modal">&times;</button>
-          <h4 class="modal-title">Are you sure you want to delete "{{ surgery_type.name }}"?</h4>
+                <a href="/surgery_type/{{ surgery_type.pk }}/delete">
+                  <button type="button" class="btn btn-danger">Delete</button>
+                </a>
+            </div>
+        </div>
     </div>
-    <div class="modal-footer">
-        <button type="button" class="btn btn-default" data-dismiss="modal">Cancel</button>
-
-        <a href="/surgery_type/{{ surgery_type.pk }}/delete">
-          <button type="button" class="btn btn-danger">Delete</button>
-        </a>
-    </div>
-    </div>
-
-</div>
 </div>
 
 {% endblock %}

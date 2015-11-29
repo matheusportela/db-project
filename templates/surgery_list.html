@@ -1,7 +1,7 @@
 {% extends "base.html" %}
 {% block content %}
 <div class="main">
-    <h1>Surgery types</h1>
+    <h1>Surgeries</h1>
 </div>
 
 <div class="table-responsive">
@@ -9,14 +9,16 @@
         <thead>
             <tr>
                 <th>ID</th>
-                <th>Name</th>
+                <th>Date</th>
+                <th>Surgery type</th>
             </tr>
         </thead>
         <tbody>
-            {% for surgery_type in surgery_type_list %}
-                <tr class="clickable-row" data-href="/surgery_type/{{ surgery_type.pk }}">
-                    <td>{{ surgery_type.pk }}</td>
-                    <td>{{ surgery_type.name }}</td>
+            {% for surgery in surgery_list %}
+                <tr class="clickable-row" data-href="/surgery/{{ surgery.pk }}">
+                    <td>{{ surgery.pk }}</td>
+                    <td>{{ surgery.surgery_date }}</td>
+                    <td>{{ surgery.surgery_type_pk }}</td>
                 </tr>
             {% endfor %}
         </tbody>
@@ -24,7 +26,7 @@
 </div>
 
 <div class="action-buttons">
-    <a href="/surgery_type/create">
+    <a href="/surgery/create">
         <button type="button" class="btn btn-primary">New</button>
     </a>
 </div>

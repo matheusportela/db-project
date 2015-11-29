@@ -1,6 +1,7 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
 
+import datetime
 import traceback
 
 from flask import Flask, request, redirect, render_template
@@ -16,8 +17,82 @@ def index_view():
     except:
         return traceback.format_exc()
 
+#############
+# SURGERIES #
+#############
+@app.route('/surgeries', methods=['GET'])
+def surgeries_view():
+    if request.method == 'GET':
+        try:
+            surgery_list = models.SurgeryModel.all()
+            return render_template('surgery_list.html',
+                surgery_list=surgery_list)
+        except:
+            return traceback.format_exc()
+
+@app.route('/surgery/create', methods=['GET', 'POST'])
+def surgeries_create_view():
+    if request.method == 'GET':
+        try:
+            return render_template('surgery_create.html')
+        except:
+            return traceback.format_exc()
+    elif request.method == 'POST':
+        try:
+            surgery = models.SurgeryModel(pk=int(request.form['pk']))
+            surgery.surgery_date = request.form['surgery_date']
+            surgery.surgery_type_pk = int(request.form['surgery_type_pk'])
+            surgery.create()
+            return redirect('/surgery/%d' % surgery.pk, code=302)
+        except:
+            return traceback.format_exc()
+
+@app.route('/surgery/<int:pk>', methods=['GET'])
+def surgery_details_view(pk):
+    if request.method == 'GET':
+        try:
+            surgery = models.SurgeryModel(pk=pk)
+            surgery.load()
+            return render_template('surgery_details.html',
+                surgery=surgery)
+        except:
+            return traceback.format_exc()
+
+@app.route('/surgery/<int:pk>/edit', methods=['GET', 'POST'])
+def surgery_edit_view(pk):
+    if request.method == 'GET':
+        try:
+            surgery = models.SurgeryModel(pk=pk)
+            surgery.load()
+            return render_template('surgery_edit.html',
+                surgery=surgery)
+        except:
+            return traceback.format_exc()
+    elif request.method == 'POST':
+        try:
+            surgery = models.SurgeryModel(pk=pk)
+            surgery.surgery_date = request.form['surgery_date']
+            surgery.surgery_type_pk = int(request.form['surgery_type_pk'])
+            surgery.save()
+            return redirect('/surgery/%d' % surgery.pk, code=302)
+        except:
+            return traceback.format_exc()
+
+@app.route('/surgery/<int:pk>/delete', methods=['GET'])
+def surgery_delete_view(pk):
+    if request.method == 'GET':
+        try:
+            surgery = models.SurgeryModel(pk=pk)
+            surgery.delete()
+            return redirect('/surgeries', code=302)
+        except:
+            return traceback.format_exc()
+
+#################
+# SURGERY TYPES #
+#################
 @app.route('/surgery_types', methods=['GET'])
-def surgery_types():
+def surgery_types_view():
     if request.method == 'GET':
         try:
             surgery_type_list = models.SurgeryTypeModel.all()
