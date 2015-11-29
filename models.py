@@ -11,15 +11,16 @@ from db import PostgreSQLAdapter as DBAdapter
 
 
 class Query(object):
-    def __init__(self, objclass, database, table):
+    def __init__(self, objclass, database, table, columns):
         self.objclass = objclass
         self.database = database
         self.table = table
+        self.columns = columns
         self.db = DBAdapter()
 
     def all(self):
         self.db.connect(self.database)
-        data = self.db.read_all(self.table)
+        data = self.db.read_all(self.table, self.columns)
         objects = []
         for d in data:
             obj = self.objclass()
@@ -46,7 +47,8 @@ class BaseModel(object):
 
     @classmethod
     def all(cls):
-        query = Query(cls, BaseModel.database, cls.get_table())
+        query = Query(cls, BaseModel.database, cls.get_table(),
+            cls._get_columns())
         return query.all()
 
     @classmethod
@@ -57,15 +59,16 @@ class BaseModel(object):
     def _get_table_name(self, class_name):
         return string.lower(class_name) + '_table'
 
-    def _get_columns(self):
-        return [c for c in self.__class__.__dict__ if not c.startswith('__')]
+    @classmethod
+    def _get_columns(cls):
+        return [c for c in cls.__dict__ if not c.startswith('__')]
 
     def _get_data(self):
         return dict((c, self.__dict__[c]) for c in self._columns)
 
     def _set_data(self, data):
         if type(data) == tuple:
-            for c, d in zip(self._columns, data):
+            for c, d in zip(self._get_columns(), data):
                 self.__dict__[c] = d
         else:
             raise ValueError, 'Unknown data type'

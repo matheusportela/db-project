@@ -1,9 +1,12 @@
 <h1>Surgery type details</h1>
 
-<p>PK: {{ surgery_type.pk }}</p>
-<p>Name: {{ surgery_type.name }}</p>
-<p>Specialty: {{ surgery_type.specialty }}</p>
-<p>Description: {{ surgery_type.description }}</p>
+<ul>
+    <li>PK: {{ surgery_type.pk }}</li>
+    <li>Name: {{ surgery_type.name }}</li>
+    <li>Specialty: {{ surgery_type.specialty }}</li>
+    <li>Description: {{ surgery_type.description }}</li>
+</u>
 
+<a href="/surgery_types">All</a>
 <a href="/surgery_type/{{ surgery_type.pk }}/edit">Edit</a>
 <a href="/surgery_type/{{ surgery_type.pk }}/delete">Delete</a>

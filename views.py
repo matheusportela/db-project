@@ -3,7 +3,7 @@
 
 import traceback
 
-from flask import Flask, request, render_template, Response
+from flask import Flask, request, redirect, render_template, Response
 
 import models
 
@@ -20,7 +20,9 @@ def index_view():
 def surgery_types():
     if request.method == 'GET':
         try:
-            return render_template('surgery_type_list.html')
+            surgery_type_list = models.SurgeryTypeModel.all()
+            return render_template('surgery_type_list.html',
+                surgery_type_list=surgery_type_list)
         except:
             return traceback.format_exc()
 
@@ -39,8 +41,7 @@ def surgery_types_create_view():
                 specialty=request.form['specialty'],
                 description=request.form['description'])
             surgery_type.create()
-            response = Response(response='Success', status=200)
-            return response
+            return redirect('/surgery_type/%d' % surgery_type.pk, code=302)
         except:
             return traceback.format_exc()
 
@@ -72,8 +73,7 @@ def surgery_type_edit_view(pk):
             surgery_type.specialty = request.form['specialty']
             surgery_type.description = request.form['description']
             surgery_type.save()
-            response = Response(response='Success', status=200)
-            return response
+            return redirect('/surgery_type/%d' % surgery_type.pk, code=302)
         except:
             return traceback.format_exc()
 
@@ -83,8 +83,7 @@ def surgery_type_delete_view(pk):
         try:
             surgery_type = models.SurgeryTypeModel(pk=pk)
             surgery_type.delete()
-            response = Response(response='Success', status=200)
-            return response
+            return redirect('/surgery_types', code=302)
         except:
             return traceback.format_exc()
 
