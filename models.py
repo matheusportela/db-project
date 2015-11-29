@@ -5,7 +5,6 @@
 """
 
 import string
-import datetime
 
 from db import PostgreSQLAdapter as DBAdapter
 
@@ -116,27 +115,3 @@ class PharmacyModel(BaseModel):
     phone = None
     cashier1 = None
     cashier2 = None
-
-
-if __name__ == '__main__':
-    for obj in SurgeryTypeModel.all():
-        print str(obj)
-
-    for obj in SurgeryModel.all():
-        print str(obj)
-
-    for obj in PharmacyModel.all():
-        print str(obj)
-
-
-    # p = PharmacyModel(pk=1, address='Address 1', phone='Phone', cashier1='Ana',
-    #     cashier2='Beto')
-    # p.create()
-
-    # s = SurgeryModel(pk=1, surgery_date=datetime.date(2015, 12, 25),
-    #     surgery_type_pk=st.pk)
-    # s.create()
-
-    # s.delete()
-    # p.delete()
-    # st.delete()

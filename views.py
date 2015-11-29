@@ -3,7 +3,7 @@
 
 import traceback
 
-from flask import Flask, request, redirect, render_template, Response
+from flask import Flask, request, redirect, render_template
 
 import models
 
