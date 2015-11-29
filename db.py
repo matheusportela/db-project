@@ -56,10 +56,8 @@ class PostgreSQLAdapter(object):
         cmd += ' FROM {} WHERE pk = {};'.format(table, pk)
         return self.execute_and_fetch_one(cmd)
 
-    def read_all(self, table, columns):
-        cmd = 'SELECT '
-        cmd += ', '.join('{}'.format(column) for column in columns)
-        cmd += ' FROM {};'.format(table)
+    def read_all(self, table):
+        cmd = 'SELECT * FROM {};'.format(table)
         return self.execute_and_fetch_all(cmd)
 
     def update(self, table, data):

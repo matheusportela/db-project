@@ -10,7 +10,28 @@ import datetime
 from db import PostgreSQLAdapter as DBAdapter
 
 
+class Query(object):
+    def __init__(self, objclass, database, table):
+        self.objclass = objclass
+        self.database = database
+        self.table = table
+        self.db = DBAdapter()
+
+    def all(self):
+        self.db.connect(self.database)
+        data = self.db.read_all(self.table)
+        objects = []
+        for d in data:
+            obj = self.objclass()
+            obj._set_data(d)
+            objects.append(obj)
+        self.db.disconnect()
+        return objects
+
+
 class BaseModel(object):
+    database = 'healthdb'
+
     def __init__(self, **kwargs):
         self._columns = self._get_columns()
 
@@ -20,10 +41,19 @@ class BaseModel(object):
             else:
                 self.__dict__[c] = None
 
-        self.database = 'healthdb'
         self.table = self._get_table_name(self.__class__.__name__)
         self.db = DBAdapter()
 
+    @classmethod
+    def all(cls):
+        query = Query(cls, BaseModel.database, cls.get_table())
+        return query.all()
+
+    @classmethod
+    def get_table(cls):
+        return BaseModel._get_table_name(cls.__name__)
+
+    @classmethod
     def _get_table_name(self, class_name):
         return string.lower(class_name) + '_table'
 
@@ -86,10 +116,15 @@ class PharmacyModel(BaseModel):
 
 
 if __name__ == '__main__':
-    st = SurgeryTypeModel(pk=1)
-    st.load()
+    for obj in SurgeryTypeModel.all():
+        print str(obj)
 
-    print st
+    for obj in SurgeryModel.all():
+        print str(obj)
+
+    for obj in PharmacyModel.all():
+        print str(obj)
+
 
     # p = PharmacyModel(pk=1, address='Address 1', phone='Phone', cashier1='Ana',
     #     cashier2='Beto')

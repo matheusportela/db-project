@@ -1,7 +1,6 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
 
-import json
 import traceback
 
 from flask import Flask, request, render_template, Response
