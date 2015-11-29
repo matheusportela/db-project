@@ -1,0 +1,9 @@
+<form method="POST" action="/surgery_type/{{ surgery_type.pk }}/edit">
+    <th>
+        <tr>PK: {{ surgery_type.pk }}</tr>
+        <tr>Name: <input type="text" name="name" value="{{ surgery_type.name }}"></tr>
+        <tr>Specialty: <input type="text" name="specialty" value="{{ surgery_type.specialty }}"></tr>
+        <tr>Description: <input type="text" name="description" value="{{ surgery_type.description }}"></tr>
+        <tr><input type="submit" value="Submit"></tr>
+    </th>
+</form>
