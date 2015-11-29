@@ -4,22 +4,18 @@
     <meta charset="utf-8">
     <meta http-equiv="X-UA-Compatible" cnotent="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1">
-
     <meta name="author" content="Matheus Vieira Portela">
     <meta name="description" content="2015/2 Database course project at the University of Brasília">
-
-    <!-- Bootstrap core CSS -->
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css" integrity="sha384-1q8mTJOASx8j1Au+a5WDVnPi2lkFfwwEAa8hDDdjZlpLegxhjVME1fgjWPGmkzs7" crossorigin="anonymous">
-
     <link rel="stylesheet" type="text/css" href="{{ url_for('static',filename='css/healthdb.css') }}">
 
-    <title>{% block title %}{% endblock %}</title>
+    <title>HealthDB</title>
   </head>
   <body>
     <nav class="navbar navbar-inverse navbar-fixed-top">
-      <div class="container">
+      <div class="container-fluid">
         <div class="navbar-header">
-          <a class="navbar-brand" href="/">Health DB</a>
+          <a class="navbar-brand" href="/">HealthDB</a>
         </div>
         <div id="navbar" class="collapse navbar-collapse">
           <ul class="nav navbar-nav">
@@ -32,11 +28,11 @@
     </nav>
 
     <div id="content">{% block content %}{% endblock %}</div>
-    <div id="footer">
+    <footer class="footer">
       {% block footer %}
-      &copy; Copyright 2010 by Matheus, Jhonantans, and Raphael.
+      <p>HealthDB 2015 by Matheus, Jhonantans, and Raphael.</p>
       {% endblock %}
-    </div>
+    </footer>
 
     <!-- Bootstrap core JavaScript
     ================================================== -->
@@ -44,5 +40,6 @@
     <!-- jQuery library -->
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.3/jquery.min.js"></script>
     <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/js/bootstrap.min.js" integrity="sha384-0mSbJDEHialfmuBBQP6A4Qrprq5OVfW37PRR3j5ELqxss1yVqOtnepnHVP9aJ7xS" crossorigin="anonymous"></script>
+    <script src="{{ url_for('static',filename='js/healthdb.js') }}"></script>
   </body>
 </html>

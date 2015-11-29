@@ -1,13 +1,39 @@
 {% extends "base.html" %}
-{% block title %}DB Project{% endblock %}
 {% block content %}
-<form method="POST" action="/surgery_type/{{ surgery_type.pk }}/edit">
-    <th>
-        <tr>PK: {{ surgery_type.pk }}</tr>
-        <tr>Name: <input type="text" name="name" value="{{ surgery_type.name }}"></tr>
-        <tr>Specialty: <input type="text" name="specialty" value="{{ surgery_type.specialty }}"></tr>
-        <tr>Description: <input type="text" name="description" value="{{ surgery_type.description }}"></tr>
-        <tr><input type="submit" value="Submit"></tr>
-    </th>
+<div class="main">
+    <h1> Surgery type "{{ surgery_type.pk }}" edit</h1>
+</div>
+
+<form class="form-horizontal" method="POST" action="/surgery_type/{{ surgery_type.pk }}/edit">
+    <div class="form-group">
+        <label for="pk" class="col-sm-1 control-label">ID:</label>
+        <div class="col-sm-10">
+            <p class="form-control-static" type="text" name="pk">{{ surgery_type.pk }}</p>
+        </div>
+    </div>
+    <div class="form-group">
+        <label for="name" class="col-sm-1 control-label">Name:</label>
+        <div class="col-sm-10">
+            <input class="form-control" type="text" name="name" value="{{ surgery_type.name }}">
+        </div>
+    </div>
+    <div class="form-group">
+        <label for="specialty" class="col-sm-1 control-label">Specialty:</label>
+        <div class="col-sm-10">
+            <input class="form-control" type="text" name="specialty" value="{{ surgery_type.specialty }}">
+        </div>
+    </div>
+    <div class="form-group">
+        <label for="description" class="col-sm-1 control-label">Description:</label>
+        <div class="col-sm-10">
+            <textarea class="form-control" rows="4" name="description">{{ surgery_type.description }}</textarea>
+        </div>
+    </div>
+
+    <div class="form-group">
+        <div class="col-sm-offset-1 col-sm-10">
+            <button class="btn btn-success" type="submit">Submit</button>
+        </div>
+    </div>
 </form>
 {% endblock %}

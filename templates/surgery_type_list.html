@@ -1,15 +1,31 @@
 {% extends "base.html" %}
-{% block title %}DB Project{% endblock %}
 {% block content %}
-<h1> Surgery types</h1>
+<div class="main">
+    <h1> Surgery types</h1>
+</div>
 
-<ul>
-    {% for surgery_type in surgery_type_list %}
-    <li>
-        <a href="/surgery_type/{{ surgery_type.pk }}">{{ surgery_type.pk }}: {{ surgery_type.name }}</a>
-    </li>
-    {% endfor %}
-</ul>
+<div class="table-responsive">
+    <table class="table table-striped table-hover">
+        <thead>
+            <tr>
+                <th>ID</th>
+                <th>Name</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for surgery_type in surgery_type_list %}
+                <tr class="clickable-row" data-href="/surgery_type/{{ surgery_type.pk }}">
+                    <td>{{ surgery_type.pk }}</td>
+                    <td>{{ surgery_type.name }}</td>
+                </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+</div>
 
-<a href="/surgery_type/create">New</a>
+<div class="action-buttons">
+    <a href="/surgery_type/create">
+        <button type="button" class="btn btn-primary">New</button>
+    </a>
+</div>
 {% endblock %}
