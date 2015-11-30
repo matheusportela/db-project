@@ -37,10 +37,7 @@ CREATE TABLE IF NOT EXISTS surgerytypemodel_table (
     pk SERIAL PRIMARY KEY,
     name TEXT,
     specialty TEXT,
-    description TEXT,
-    patient_pk INT REFERENCES patientmodel_table(pk),
-    surgery_type_pk INT REFERENCES surgerytypemodel_table(pk),
-    employee_pk INT REFERENCES employeemodel_table(pk));
+    description TEXT);
 
 CREATE TABLE IF NOT EXISTS pharmacymodel_table (
     pk SERIAL PRIMARY KEY,
@@ -67,6 +64,8 @@ CREATE TABLE IF NOT EXISTS departmentmodel_table (
 CREATE TABLE IF NOT EXISTS surgerymodel_table (
     pk SERIAL PRIMARY KEY,
     surgery_date DATE,
+    patient_pk INT REFERENCES patientmodel_table(pk),
+    employee_pk INT REFERENCES employeemodel_table(pk),
     surgery_type_pk INT REFERENCES surgerytypemodel_table(pk));
 
 CREATE TABLE IF NOT EXISTS appointmentmodel_table (

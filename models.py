@@ -106,12 +106,17 @@ class SurgeryTypeModel(BaseModel):
 class SurgeryModel(BaseModel):
     pk = None
     surgery_date = None
+    patient_pk = None
+    employee_pk = None
     surgery_type_pk = None
 
 
-class PharmacyModel(BaseModel):
+class PatientModel(BaseModel):
     pk = None
+    name = None
     address = None
     phone = None
-    cashier1 = None
-    cashier2 = None
+    blood_type = None
+    height = None
+    weight = None
+    birthdate = None

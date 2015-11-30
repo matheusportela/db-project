@@ -1,7 +1,6 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
 
-import datetime
 import traceback
 
 from flask import Flask, request, redirect, render_template
@@ -16,6 +15,87 @@ def index_view():
         return render_template('index.html')
     except:
         return traceback.format_exc()
+
+###########
+# PATIENT #
+###########
+@app.route('/patients', methods=['GET'])
+def patient_view():
+    if request.method == 'GET':
+        try:
+            patient_list = models.PatientModel.all()
+            return render_template('patient_list.html',
+                patient_list=patient_list)
+        except:
+            return traceback.format_exc()
+
+@app.route('/patient/create', methods=['GET', 'POST'])
+def patients_create_view():
+    if request.method == 'GET':
+        try:
+            return render_template('patient_create.html')
+        except:
+            return traceback.format_exc()
+    elif request.method == 'POST':
+        try:
+            patient = models.PatientModel(pk=int(request.form['pk']))
+            patient.name = request.form['name']
+            patient.address = request.form['address']
+            patient.phone = request.form['phone']
+            patient.blood_type = request.form['blood_type']
+            patient.height = float(request.form['height'])
+            patient.weight = float(request.form['weight'])
+            patient.birthdate = request.form['birthdate']
+            patient.create()
+            return redirect('/patient/%d' % patient.pk, code=302)
+        except:
+            return traceback.format_exc()
+
+@app.route('/patient/<int:pk>', methods=['GET'])
+def patient_details_view(pk):
+    if request.method == 'GET':
+        try:
+            patient = models.PatientModel(pk=pk)
+            patient.load()
+            return render_template('patient_details.html',
+                patient=patient)
+        except:
+            return traceback.format_exc()
+
+@app.route('/patient/<int:pk>/edit', methods=['GET', 'POST'])
+def patient_edit_view(pk):
+    if request.method == 'GET':
+        try:
+            patient = models.PatientModel(pk=pk)
+            patient.load()
+            return render_template('patient_edit.html',
+                patient=patient)
+        except:
+            return traceback.format_exc()
+    elif request.method == 'POST':
+        try:
+            patient = models.PatientModel(pk=pk)
+            patient.name = request.form['name']
+            patient.address = request.form['address']
+            patient.phone = request.form['phone']
+            patient.blood_type = request.form['blood_type']
+            patient.height = float(request.form['height'])
+            patient.weight = float(request.form['weight'])
+            patient.birthdate = request.form['birthdate']
+            patient.save()
+            return redirect('/patient/%d' % patient.pk, code=302)
+        except:
+            return traceback.format_exc()
+
+@app.route('/patient/<int:pk>/delete', methods=['GET'])
+def patient_delete_view(pk):
+    if request.method == 'GET':
+        try:
+            patient = models.PatientModel(pk=pk)
+            patient.delete()
+            return redirect('/patients', code=302)
+        except:
+            return traceback.format_exc()
 
 #############
 # SURGERIES #
@@ -42,6 +122,9 @@ def surgeries_create_view():
             surgery = models.SurgeryModel(pk=int(request.form['pk']))
             surgery.surgery_date = request.form['surgery_date']
             surgery.surgery_type_pk = int(request.form['surgery_type_pk'])
+            surgery.patient_pk = int(request.form['patient_pk']) if request.form['patient_pk'] else None
+            surgery.employee_pk = int(request.form['employee_pk']) if request.form['employee_pk'] else None
+            surgery.surgery_type_pk = int(request.form['surgery_type_pk']) if request.form['surgery_type_pk'] else None
             surgery.create()
             return redirect('/surgery/%d' % surgery.pk, code=302)
         except:
@@ -73,6 +156,9 @@ def surgery_edit_view(pk):
             surgery = models.SurgeryModel(pk=pk)
             surgery.surgery_date = request.form['surgery_date']
             surgery.surgery_type_pk = int(request.form['surgery_type_pk'])
+            surgery.patient_pk = int(request.form['patient_pk']) if request.form['patient_pk'] else None
+            surgery.employee_pk = int(request.form['employee_pk']) if request.form['employee_pk'] else None
+            surgery.surgery_type_pk = int(request.form['surgery_type_pk']) if request.form['surgery_type_pk'] else None
             surgery.save()
             return redirect('/surgery/%d' % surgery.pk, code=302)
         except:

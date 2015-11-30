@@ -10,7 +10,9 @@
             <tr>
                 <th>ID</th>
                 <th>Date</th>
-                <th>Surgery type</th>
+                <th>Patient ID</th>
+                <th>Employee ID</th>
+                <th>Surgery type ID</th>
             </tr>
         </thead>
         <tbody>
@@ -18,6 +20,8 @@
                 <tr class="clickable-row" data-href="/surgery/{{ surgery.pk }}">
                     <td>{{ surgery.pk }}</td>
                     <td>{{ surgery.surgery_date }}</td>
+                    <td>{{ surgery.patient_pk }}</td>
+                    <td>{{ surgery.employee_pk }}</td>
                     <td>{{ surgery.surgery_type_pk }}</td>
                 </tr>
             {% endfor %}

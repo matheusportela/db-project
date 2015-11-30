@@ -1,0 +1,31 @@
+{% extends "base.html" %}
+{% block content %}
+<div class="main">
+    <h1>Patients</h1>
+</div>
+
+<div class="table-responsive">
+    <table class="table table-striped table-hover">
+        <thead>
+            <tr>
+                <th>ID</th>
+                <th>Name</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for patient in patient_list %}
+                <tr class="clickable-row" data-href="/patient/{{ patient.pk }}">
+                    <td>{{ patient.pk }}</td>
+                    <td>{{ patient.name }}</td>
+                </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+</div>
+
+<div class="action-buttons">
+    <a href="/patient/create">
+        <button type="button" class="btn btn-primary">New</button>
+    </a>
+</div>
+{% endblock %}
