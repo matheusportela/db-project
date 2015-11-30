@@ -4,6 +4,7 @@ This project is a course requirement for the Databases class of 2015, at the Uni
 # Dependencies
 * PostgreSQL 9.4.5
 * Psycopg 2.6.1
+* Flask 0.10.1
 
 ## Installing PostgreSQL
 On Mac OS X, install PostgreSQL via [Homebrew](http://brew.sh/).
@@ -32,18 +33,20 @@ $ psql <database>
 ```
 
 ## Installing Python dependencies
-The command bellow installs all necessary Python dependencies.
+The commands bellow install all necessary Python dependencies.
 
 ```sh
 $ pip install psycopg2
+$ pip install flask
 ```
 
 # Configuration
 
-First, it is necessary to create a database to operate with the project. Let's create a `healthdb` in PostgreSQL with the command bellow.
+First, it is necessary to create a database to operate with the project. Let's create a `healthdb` in PostgreSQL and create all necessary tables.
 
 ```sh
 $ createdb healthdb
+$ psql healthdb < build_db.sql
 ```
 
 Should you need to delete the created database, just drop it with the following command.
@@ -52,30 +55,18 @@ Should you need to delete the created database, just drop it with the following 
 $ dropdb healthdb
 ```
 
-Build the database.
+# Execution
+
+The project may be accessed through two interfaces. The first one allows direct access to the system's database using PostgreSQL's `psql` client.
 
 ```sh
-$ psql healthdb < build_db.sql
+$ psql healthdb
 ```
 
-# Testing
-
-Automated tests require the creation of the `testdb` database for testing purposes.
+The second provides a web interface via `http://localhost:5000`.
 
 ```sh
-$ createdb testdb
-```
-
-In order to run tests, simply run the following command.
-
-```sh
-$ ./run_tests.sh
-```
-
-The `run_tests.sh` file must have execution privileges. If this is not the case, alter it with the command bellow.
-
-```sh
-$ chmod +x run_tests.sh
+$ python app.py
 ```
 
 # Specification
