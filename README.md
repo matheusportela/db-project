@@ -42,11 +42,12 @@ $ pip install flask
 
 # Configuration
 
-First, it is necessary to create a database to operate with the project. Let's create a `healthdb` in PostgreSQL and create all necessary tables.
+It is necessary to create a database to operate with the project. Let's create a `healthdb` in PostgreSQL, create all necessary tables, and populate them.
 
 ```sh
 $ createdb healthdb
 $ psql healthdb < build_db.sql
+$ psql healthdb < populate_db.sql
 ```
 
 Should you need to delete the created database, just drop it with the following command.

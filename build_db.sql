@@ -61,6 +61,19 @@ CREATE TABLE IF NOT EXISTS departmentmodel_table (
     boss TEXT,
     hospital_pk INT REFERENCES hospitalmodel_table(pk));
 
+CREATE TABLE IF NOT EXISTS employeemodel_table (
+    pk SERIAL PRIMARY KEY,
+    name TEXT, /* Not in ERM */
+    birthdate DATE,
+    phone TEXT,
+    address TEXT,
+    type TEXT,
+    position TEXT,
+    special_age NUMERIC, /* What is this? */
+    wage REAL,
+    picture BYTEA,
+    department_pk INT REFERENCES departmentmodel_table(pk));
+
 CREATE TABLE IF NOT EXISTS surgerymodel_table (
     pk SERIAL PRIMARY KEY,
     surgery_date DATE,
@@ -78,19 +91,6 @@ CREATE TABLE IF NOT EXISTS prescriptionmodel_table (
     pk SERIAL PRIMARY KEY,
     prescription_date DATE,
     appointment_pk INT REFERENCES appointmentmodel_table(pk));
-
-CREATE TABLE IF NOT EXISTS employeemodel_table (
-    pk SERIAL PRIMARY KEY,
-    name TEXT, /* Not in ERM */
-    birthdate DATE,
-    phone TEXT,
-    address TEXT,
-    type TEXT,
-    position TEXT,
-    special_age NUMERIC, /* What is this? */
-    wage REAL,
-    picture BYTEA,
-    department_pk INT REFERENCES departmentmodel_table(pk));
 
 /*
  * Many-to-many relations
