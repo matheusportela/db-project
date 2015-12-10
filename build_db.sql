@@ -145,4 +145,17 @@ CREATE TABLE IF NOT EXISTS departmentemployeemodel_table (
 CREATE VIEW blood_type_a AS
     SELECT *
     FROM patientmodel_table
-    WHERE blood_type LIKE 'A%'
+    WHERE blood_type LIKE 'A%';
+
+/*
+ * Procedures
+ * Usage: SELECT function_name();
+ */
+CREATE OR REPLACE FUNCTION increment_wage()
+RETURNS void AS $$
+DECLARE
+    register RECORD;
+BEGIN
+    UPDATE employeemodel_table SET wage = 1.1*wage;
+END;
+$$ LANGUAGE plpgsql;
