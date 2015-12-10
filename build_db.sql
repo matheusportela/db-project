@@ -138,3 +138,11 @@ CREATE TABLE IF NOT EXISTS departmentemployeemodel_table (
     department_pk INT REFERENCES departmentmodel_table(pk),
     employee_pk INT REFERENCES employeemodel_table(pk),
     PRIMARY KEY (department_pk, employee_pk));
+
+/*
+ * Views
+ */
+CREATE VIEW blood_type_a AS
+    SELECT *
+    FROM patientmodel_table
+    WHERE blood_type LIKE 'A%'
