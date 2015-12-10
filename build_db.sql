@@ -151,11 +151,25 @@ CREATE VIEW blood_type_a AS
  * Procedures
  * Usage: SELECT function_name();
  */
-CREATE OR REPLACE FUNCTION increment_wage()
+CREATE OR REPLACE FUNCTION update_wages()
 RETURNS void AS $$
 DECLARE
     register RECORD;
+    new_wage REAL;
 BEGIN
-    UPDATE employeemodel_table SET wage = 1.1*wage;
+    FOR register IN
+        SELECT * FROM employeemodel_table
+    LOOP
+        new_wage := 1.1*register.wage;
+
+        IF new_wage > 10000 THEN
+            new_wage := 10000;
+        ELSIF new_wage < 5000 THEN
+            new_wage := 5000;
+        END IF;
+
+        UPDATE employeemodel_table SET wage = new_wage WHERE pk = register.pk;
+    END LOOP;
+    RETURN;
 END;
 $$ LANGUAGE plpgsql;
