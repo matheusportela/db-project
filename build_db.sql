@@ -18,20 +18,20 @@ CREATE TABLE IF NOT EXISTS inventorymodel_table (
     priority NUMERIC);
 
 CREATE TABLE IF NOT EXISTS materialsmodel_table (
-    pk SERIAL PRIMARY KEY,
+    material_pk SERIAL PRIMARY KEY,
     name TEXT,
     usage TEXT) INHERITS (inventorymodel_table);
 
 CREATE TABLE IF NOT EXISTS medicinemodel_table (
-    pk SERIAL PRIMARY KEY,
+    medicine_pk SERIAL PRIMARY KEY,
     name TEXT,
     type TEXT,
     description TEXT) INHERITS (inventorymodel_table);
 
 CREATE TABLE IF NOT EXISTS diagnosismodel_table (
     pk SERIAL PRIMARY KEY,
-    treatment TEXT,
-    disease TEXT);
+    disease TEXT,
+    treatment TEXT);
 
 CREATE TABLE IF NOT EXISTS surgerytypemodel_table (
     pk SERIAL PRIMARY KEY,
@@ -43,7 +43,7 @@ CREATE TABLE IF NOT EXISTS pharmacymodel_table (
     pk SERIAL PRIMARY KEY,
     address TEXT,
     phone TEXT,
-    cashier TEXT,
+    funds REAL,
     inventory_pk INT REFERENCES inventorymodel_table(pk));
 
 CREATE TABLE IF NOT EXISTS hospitalmodel_table (
@@ -51,7 +51,7 @@ CREATE TABLE IF NOT EXISTS hospitalmodel_table (
     name TEXT,
     address TEXT,
     phone TEXT,
-    cashier TEXT,
+    funds REAL,
     inventory_pk INT REFERENCES inventorymodel_table(pk));
 
 CREATE TABLE IF NOT EXISTS departmentmodel_table (
@@ -86,7 +86,7 @@ CREATE TABLE IF NOT EXISTS surgerymodel_table (
 
 CREATE TABLE IF NOT EXISTS appointmentmodel_table (
     pk SERIAL PRIMARY KEY,
-    appointment_data DATE,
+    appointment_date DATE,
     patient_pk INT REFERENCES patientmodel_table(pk),
     employee_pk INT REFERENCES employeemodel_table(pk),
     hospital_pk INT REFERENCES hospitalmodel_table(pk));
@@ -101,7 +101,7 @@ CREATE TABLE IF NOT EXISTS prescriptionmodel_table (
  */
 CREATE TABLE IF NOT EXISTS prescriptionmedicinemodel_table (
     prescription_pk INT REFERENCES prescriptionmodel_table(pk),
-    medicine_pk INT REFERENCES medicinemodel_table(pk),
+    medicine_pk INT REFERENCES medicinemodel_table(medicine_pk),
     PRIMARY KEY (prescription_pk, medicine_pk));
 
 CREATE TABLE IF NOT EXISTS employeeappointmentmodel_table (
@@ -121,7 +121,7 @@ CREATE TABLE IF NOT EXISTS diagnosispatientmodel_table (
 
 CREATE TABLE IF NOT EXISTS diagnosismedicinemodel_table (
     diagnosis_pk INT REFERENCES diagnosismodel_table(pk),
-    medicine_pk INT REFERENCES medicinemodel_table(pk),
+    medicine_pk INT REFERENCES medicinemodel_table(medicine_pk),
     PRIMARY KEY (diagnosis_pk, medicine_pk));
 
 CREATE TABLE IF NOT EXISTS hospitalemployeemodel_table (
