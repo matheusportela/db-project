@@ -121,10 +121,12 @@ def surgeries_create_view():
         try:
             surgery = models.SurgeryModel(pk=int(request.form['pk']))
             surgery.surgery_date = request.form['surgery_date']
-            surgery.surgery_type_pk = int(request.form['surgery_type_pk'])
             surgery.patient_pk = int(request.form['patient_pk']) if request.form['patient_pk'] else None
-            surgery.employee_pk = int(request.form['employee_pk']) if request.form['employee_pk'] else None
             surgery.surgery_type_pk = int(request.form['surgery_type_pk']) if request.form['surgery_type_pk'] else None
+            surgery.general_surgeon_pk = int(request.form['general_surgeon_pk']) if request.form['general_surgeon_pk'] else None
+            surgery.co_surgeon_pk = int(request.form['co_surgeon_pk']) if request.form['co_surgeon_pk'] else None
+            surgery.assistant_surgeon_pk = int(request.form['assistant_surgeon_pk']) if request.form['assistant_surgeon_pk'] else None
+            surgery.inventory_pk = int(request.form['inventory_pk']) if request.form['inventory_pk'] else None
             surgery.create()
             return redirect('/surgery/%d' % surgery.pk, code=302)
         except:
@@ -155,10 +157,12 @@ def surgery_edit_view(pk):
         try:
             surgery = models.SurgeryModel(pk=pk)
             surgery.surgery_date = request.form['surgery_date']
-            surgery.surgery_type_pk = int(request.form['surgery_type_pk'])
             surgery.patient_pk = int(request.form['patient_pk']) if request.form['patient_pk'] else None
-            surgery.employee_pk = int(request.form['employee_pk']) if request.form['employee_pk'] else None
             surgery.surgery_type_pk = int(request.form['surgery_type_pk']) if request.form['surgery_type_pk'] else None
+            surgery.general_surgeon_pk = int(request.form['general_surgeon_pk']) if request.form['general_surgeon_pk'] else None
+            surgery.co_surgeon_pk = int(request.form['co_surgeon_pk']) if request.form['co_surgeon_pk'] else None
+            surgery.assistant_surgeon_pk = int(request.form['assistant_surgeon_pk']) if request.form['assistant_surgeon_pk'] else None
+            surgery.inventory_pk = int(request.form['inventory_pk']) if request.form['inventory_pk'] else None
             surgery.save()
             return redirect('/surgery/%d' % surgery.pk, code=302)
         except:

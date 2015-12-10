@@ -22,11 +22,14 @@ INSERT INTO surgerytypemodel_table
     (3, 'AVC', 'Neurologia', 'Intervenção pós-AVC');
 
 INSERT INTO surgerymodel_table
-    (pk, surgery_date, patient_pk, employee_pk, surgery_type_pk) VALUES
-    (1, '2010-10-10', 1, NULL, 2);
+    (pk, surgery_date, patient_pk, surgery_type_pk, general_surgeon_pk,
+        co_surgeon_pk, assistant_surgeon_pk, inventory_pk) VALUES
+    (1, '2010-10-10', 1, 2, NULL, NULL, NULL, NULL);
 INSERT INTO surgerymodel_table
-    (pk, surgery_date, patient_pk, employee_pk, surgery_type_pk) VALUES
-    (2, '2011-11-11', 3, NULL, 1);
+    (pk, surgery_date, patient_pk, surgery_type_pk, general_surgeon_pk,
+        co_surgeon_pk, assistant_surgeon_pk, inventory_pk) VALUES
+    (2, '2011-11-11', 3, 1, NULL, NULL, NULL, NULL);
 INSERT INTO surgerymodel_table
-    (pk, surgery_date, patient_pk, employee_pk, surgery_type_pk) VALUES
-    (3, '2012-12-12', 3, NULL, 3);
+    (pk, surgery_date, patient_pk, surgery_type_pk, general_surgeon_pk,
+        co_surgeon_pk, assistant_surgeon_pk, inventory_pk) VALUES
+    (3, '2012-12-12', 3, 3, NULL, NULL, NULL, NULL);

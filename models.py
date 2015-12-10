@@ -107,8 +107,11 @@ class SurgeryModel(BaseModel):
     pk = None
     surgery_date = None
     patient_pk = None
-    employee_pk = None
     surgery_type_pk = None
+    general_surgeon_pk = None
+    co_surgeon_pk = None
+    assistant_surgeon_pk = None
+    inventory_pk = None
 
 
 class PatientModel(BaseModel):

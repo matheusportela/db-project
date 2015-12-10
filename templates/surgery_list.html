@@ -11,8 +11,11 @@
                 <th>ID</th>
                 <th>Date</th>
                 <th>Patient ID</th>
-                <th>Employee ID</th>
                 <th>Surgery type ID</th>
+                <th>General Surgeon ID</th>
+                <th>Co-Surgeon ID</th>
+                <th>Assistant Surgeon ID</th>
+                <th>Inventory ID</th>
             </tr>
         </thead>
         <tbody>
@@ -21,8 +24,11 @@
                     <td>{{ surgery.pk }}</td>
                     <td>{{ surgery.surgery_date }}</td>
                     <td>{{ surgery.patient_pk }}</td>
-                    <td>{{ surgery.employee_pk }}</td>
                     <td>{{ surgery.surgery_type_pk }}</td>
+                    <td>{{ surgery.general_surgeon_pk }}</td>
+                    <td>{{ surgery.co_surgeon_pk }}</td>
+                    <td>{{ surgery.assistant_surgeon_pk }}</td>
+                    <td>{{ surgery.inventory_pk }}</td>
                 </tr>
             {% endfor %}
         </tbody>

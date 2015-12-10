@@ -6,10 +6,10 @@ CREATE TABLE IF NOT EXISTS patientmodel_table (
     name TEXT,
     address TEXT,
     phone TEXT,
-    blood_type TEXT,
-    height REAL,
+    birthdate DATE,
     weight REAL,
-    birthdate DATE);
+    height REAL,
+    blood_type TEXT);
 
 CREATE TABLE IF NOT EXISTS inventorymodel_table (
     pk SERIAL PRIMARY KEY,
@@ -17,7 +17,7 @@ CREATE TABLE IF NOT EXISTS inventorymodel_table (
     price REAL,
     priority NUMERIC);
 
-CREATE TABLE IF NOT EXISTS toolmodel_table (
+CREATE TABLE IF NOT EXISTS materialsmodel_table (
     pk SERIAL PRIMARY KEY,
     name TEXT,
     usage TEXT) INHERITS (inventorymodel_table);
@@ -43,8 +43,7 @@ CREATE TABLE IF NOT EXISTS pharmacymodel_table (
     pk SERIAL PRIMARY KEY,
     address TEXT,
     phone TEXT,
-    cashier1 TEXT,
-    cashier2 TEXT,
+    cashier TEXT,
     inventory_pk INT REFERENCES inventorymodel_table(pk));
 
 CREATE TABLE IF NOT EXISTS hospitalmodel_table (
@@ -58,38 +57,43 @@ CREATE TABLE IF NOT EXISTS hospitalmodel_table (
 CREATE TABLE IF NOT EXISTS departmentmodel_table (
     pk SERIAL PRIMARY KEY,
     name TEXT,
-    boss TEXT,
     hospital_pk INT REFERENCES hospitalmodel_table(pk));
 
 CREATE TABLE IF NOT EXISTS employeemodel_table (
     pk SERIAL PRIMARY KEY,
     name TEXT, /* Not in ERM */
     birthdate DATE,
-    phone TEXT,
-    address TEXT,
     type TEXT,
     position TEXT,
-    special_age NUMERIC, /* What is this? */
+    specialty TEXT,
+    address TEXT,
+    phone TEXT,
     wage REAL,
+    contract_date DATE,
     picture BYTEA,
-    department_pk INT REFERENCES departmentmodel_table(pk));
+    department_pk INT REFERENCES departmentmodel_table(pk),
+    boss INT REFERENCES employeemodel_table(pk));
 
 CREATE TABLE IF NOT EXISTS surgerymodel_table (
     pk SERIAL PRIMARY KEY,
     surgery_date DATE,
     patient_pk INT REFERENCES patientmodel_table(pk),
-    employee_pk INT REFERENCES employeemodel_table(pk),
-    surgery_type_pk INT REFERENCES surgerytypemodel_table(pk));
+    surgery_type_pk INT REFERENCES surgerytypemodel_table(pk),
+    general_surgeon_pk INT REFERENCES employeemodel_table(pk),
+    co_surgeon_pk INT REFERENCES employeemodel_table(pk),
+    assistant_surgeon_pk INT REFERENCES employeemodel_table(pk),
+    inventory_pk INT REFERENCES inventorymodel_table(pk));
 
 CREATE TABLE IF NOT EXISTS appointmentmodel_table (
     pk SERIAL PRIMARY KEY,
     appointment_data DATE,
     patient_pk INT REFERENCES patientmodel_table(pk),
+    employee_pk INT REFERENCES employeemodel_table(pk),
     hospital_pk INT REFERENCES hospitalmodel_table(pk));
 
 CREATE TABLE IF NOT EXISTS prescriptionmodel_table (
     pk SERIAL PRIMARY KEY,
-    prescription_date DATE,
+    dosage TEXT,
     appointment_pk INT REFERENCES appointmentmodel_table(pk));
 
 /*
@@ -125,7 +129,12 @@ CREATE TABLE IF NOT EXISTS hospitalemployeemodel_table (
     employee_pk INT REFERENCES employeemodel_table(pk),
     PRIMARY KEY (hospital_pk, employee_pk));
 
-CREATE TABLE IF NOT EXISTS surgeryinventorymodel_table (
+CREATE TABLE IF NOT EXISTS surgerynursemodel_table (
     surgery_pk INT REFERENCES surgerymodel_table(pk),
-    inventory_pk INT REFERENCES inventorymodel_table(pk),
-    PRIMARY KEY (surgery_pk, inventory_pk));
+    nurse_pk INT REFERENCES employeemodel_table(pk),
+    PRIMARY KEY (surgery_pk, nurse_pk));
+
+CREATE TABLE IF NOT EXISTS departmentemployeemodel_table (
+    department_pk INT REFERENCES departmentmodel_table(pk),
+    employee_pk INT REFERENCES employeemodel_table(pk),
+    PRIMARY KEY (department_pk, employee_pk));
